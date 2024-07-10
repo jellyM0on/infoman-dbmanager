@@ -26,8 +26,8 @@ db.connect(err => {
 });
 
 //query function for get requests
-function getQuery(sqlQuery, res){
-  db.query(sqlQuery, (err, results) => {
+function getQuery(sqlQuery, values, res){
+  db.query(sqlQuery, values, (err, results) => {
     if (err) {
       return res.status(500).send(err);
     }
@@ -39,22 +39,24 @@ function getQuery(sqlQuery, res){
 app.get('/query', (req, res) => {
   const sqlQuery = req.body.sqlQuery; 
   if(!sqlQuery) return res.status(400).send('Empty Query'); 
-  getQuery(sqlQuery, res); 
+  getQuery(sqlQuery, '', res); 
 })
 
 //get table data
 app.get('/:table', (req, res) => {
   const table = req.params.table; 
-  const sqlQuery = `SELECT * FROM ${table}`;
-  getQuery(sqlQuery, res); 
+  const sqlQuery = `SELECT * FROM ??`;
+  getQuery(sqlQuery, table, res); 
 });
 
 //get record from table 
 app.get('/:table/:recordID', (req, res) => {
   const table = req.params.table; 
-  const recordID = req.params.recordID; 
-  const sqlQuery = `SELECT * FROM ${table} WHERE ${table + 'ID'}=${recordID}`
-  getQuery(sqlQuery, res); 
+  const recordID = parseInt(req.params.recordID); 
+  const sqlQuery = `SELECT * FROM ?? WHERE ?? = ?`;
+
+  const values = [table, table + 'ID', recordID]; 
+  getQuery(sqlQuery, values, res); 
 });
 
 //create new record in a table
@@ -63,9 +65,10 @@ app.post('/:table', (req, res) => {
   const record = req.body.record; 
  
   const temp = record.map(() => '?').join(','); 
-  const sqlQuery = `INSERT INTO ${table} VALUES (${temp})`
-
-  db.query(sqlQuery, record, (err, results) => {
+  const sqlQuery = `INSERT INTO ?? VALUES (${temp})`
+  const values = [table].concat(record)
+  
+  db.query(sqlQuery, values, (err, results) => {
     if(err){
       return res.status(500).send(err);
     }
@@ -80,8 +83,8 @@ app.put('/:table/:recordID', (req, res) => {
   const record = req.body.record; 
 
   const temp = Object.keys(record).map(key => `${key} = ?`).join(', ');
-  const sqlQuery = `UPDATE ${table} SET ${temp} WHERE ${table}ID = ?`;
-  const values = [...Object.values(record), recordID];
+  const sqlQuery = `UPDATE ?? SET ${temp} WHERE ?? = ?`;
+  const values = [table, ...Object.values(record), `${table}ID`, recordID];
 
   db.query(sqlQuery, values, (err, results) => {
     if(err){
@@ -95,9 +98,9 @@ app.put('/:table/:recordID', (req, res) => {
 app.delete('/:table/:recordID', (req, res) => {
   const table = req.params.table; 
   const recordID = parseInt(req.params.recordID);
-  const sqlQuery = `DELETE FROM ${table} WHERE ${table + 'ID'} = ?`; 
-
-  db.query(sqlQuery, recordID, (err, results) => {
+  const sqlQuery = `DELETE FROM ?? WHERE ?? = ?`; 
+  const values = [table, `${table}ID`, recordID]
+  db.query(sqlQuery, values, (err, results) => {
     if(err){
       return res.status(500).send(err);
     } 
