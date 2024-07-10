@@ -133,7 +133,7 @@ const Educ_Background = {
 //school model
 const School = {
     schoolID: {
-        dataType: 'integer', 
+        dataType: 'string', 
         allowNull: false
     },
     name: {
@@ -169,6 +169,7 @@ function isComplete(input, model){
 }
 
 const validate = (input, model, mode) => {
+    console.log(input);
     model = models[modelNames.indexOf(model)]
     if (!isModel) return false
     if (mode == 1 && !isComplete(input, model)) return false

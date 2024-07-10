@@ -1,6 +1,7 @@
 const express = require('express')
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const { validate } = require('./validateInput');
 
 require('dotenv').config({path: '../.env'});
@@ -8,6 +9,7 @@ require('dotenv').config({path: '../.env'});
 const app = express()
 const port = 3000
 
+app.use(cors())
 app.use(bodyParser.json());
 
 //create .env file outside of this directory and input database values
@@ -66,11 +68,11 @@ app.get('/:table/:recordID', (req, res) => {
 app.post('/:table', (req, res) => {
   const table = req.params.table; 
   const record = req.body.record; 
-  if (!validate(record, `${table}`, 1)){ 
-    console.log('Invalid Data'); 
-    return res.status(500); 
-  }
-  console.log(record); 
+  console.log(record);
+  // if (!validate(record, `${table}`, 1)){ 
+  //   console.log(record); 
+  //   return res.status(500); 
+  // }
   const temp = Object.keys(record).map(() => '?').join(',');
   const sqlQuery = `INSERT INTO ?? VALUES (${temp})`
   const values = [table, ...Object.values(record)];
