@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pasig ScholarDB</title>
+    <link rel="stylesheet" href="./teststyle.css">
+</head>
+<body>
+    <header>
+        <h1>Pasig ScholarDB</h1>
+    </header>
+    <div id="main-container">
+        <nav>
+            <div>
+                <a href="./index.html"><img src="./assets/home.svg" alt="home"></a>
+                <a href="./index.html"><img src="./assets/terminal.svg" alt="terminal"></a>
+            </div>
+          
+            <a href="./index.html"><img src="./assets/help.svg" alt="help"></a>
+        </nav>
+        <main>
+            <div id="tables-tab">
+                <div id="tables-container">
+                    <p>TABLE</p>
+                    <button class="tablinks" id="applicant">Applicant Information</button>
+                    <button class="tablinks" id="educ_background">Educational Background</button>
+                    <button class="tablinks" id="family">Family Information</button>
+                    <button class="tablinks" id="school">Schools</button>
+                </div>
+            
+                <button id="create-record">+ Add Record</button>
+            </div>
+            <div id="table-container">
+            </div>
+        </main>
+    </div>
+<script src="./index.js" defer></script>
+</body>
+</html>
