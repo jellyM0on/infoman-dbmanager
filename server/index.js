@@ -1,6 +1,8 @@
 const express = require('express')
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
+const { validate } = require('./validateInput');
+
 require('dotenv').config({path: '../.env'});
 
 const app = express()
@@ -14,7 +16,8 @@ const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD, 
-  database: process.env.DB_DATABASE
+  database: process.env.DB_DATABASE,
+  multipleStatements: false
 });
 
 db.connect(err => {
@@ -37,7 +40,7 @@ function getQuery(sqlQuery, values, res){
 
 //get results from a custom query 
 app.get('/query', (req, res) => {
-  const sqlQuery = req.body.sqlQuery; 
+  const sqlQuery = `${req.body.sqlQuery}`; 
   if(!sqlQuery) return res.status(400).send('Empty Query'); 
   getQuery(sqlQuery, '', res); 
 })
@@ -63,10 +66,14 @@ app.get('/:table/:recordID', (req, res) => {
 app.post('/:table', (req, res) => {
   const table = req.params.table; 
   const record = req.body.record; 
- 
-  const temp = record.map(() => '?').join(','); 
+  if (!validate(record, `${table}`, 1)){ 
+    console.log('Invalid Data'); 
+    return res.status(500); 
+  }
+  console.log(record); 
+  const temp = Object.keys(record).map(() => '?').join(',');
   const sqlQuery = `INSERT INTO ?? VALUES (${temp})`
-  const values = [table].concat(record)
+  const values = [table, ...Object.values(record)];
   
   db.query(sqlQuery, values, (err, results) => {
     if(err){
@@ -81,6 +88,10 @@ app.put('/:table/:recordID', (req, res) => {
   const table = req.params.table; 
   const recordID = req.params.recordID;
   const record = req.body.record; 
+  if (!validate(record, `${table}`, 0)){ 
+    console.log('Invalid Data'); 
+    return res.status(500); 
+  }
 
   const temp = Object.keys(record).map(key => `${key} = ?`).join(', ');
   const sqlQuery = `UPDATE ?? SET ${temp} WHERE ?? = ?`;
