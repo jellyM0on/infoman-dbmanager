@@ -23,10 +23,12 @@ async function getResults(query){
             body: JSON.stringify({ sqlQuery: query })
         });
         const data = await response.json(); 
-        console.log(data); 
+        if(results == null || results == undefined){
+            return false;
+        }
         return data;
     } catch(err){
-        console.log(err); 
+        createErrorPopup('Invalid input! Please submit another query.'); 
     }
 }
 
@@ -59,4 +61,17 @@ function createTable(data){
         table.appendChild(row);
     });
     container.appendChild(table); 
+}
+
+//show error
+function createErrorPopup(message) {
+    const popup = document.createElement('div');
+    popup.classList.add('error-popup');
+    popup.textContent = message;
+
+    document.body.appendChild(popup);
+
+    setTimeout(() => {
+        popup.remove();
+    }, 5000);
 }

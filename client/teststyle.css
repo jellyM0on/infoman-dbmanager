@@ -295,3 +295,42 @@ th:nth-child(1){
 #results-container th:nth-child(1){
     position: unset;
 }
+
+/* error popup */
+.error-popup {
+    position: absolute;
+    top: 20vh;
+    left: 0; 
+    right: 0;
+    margin-left: auto; 
+    margin-right: auto; 
+    width: fit-content;
+    background-color: #ea0000;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    z-index: 1000;
+}
+
+/* scrollbar */
+/* width */
+::-webkit-scrollbar {
+    width: 0.5em;
+    height: 0.5em;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: white;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #c7c6c6;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
