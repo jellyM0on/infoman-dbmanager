@@ -70,10 +70,6 @@ app.post('/:table', (req, res) => {
   const table = req.params.table; 
   const record = req.body.record; 
   console.log(record);
-  // if (!validate(record, `${table}`, 1)){ 
-  //   console.log(record); 
-  //   return res.status(500); 
-  // }
   const temp = Object.keys(record).map(() => '?').join(',');
   const sqlQuery = `INSERT INTO ?? VALUES (${temp})`
   const values = [table, ...Object.values(record)];
@@ -87,9 +83,16 @@ app.post('/:table', (req, res) => {
 }); 
 
 //update record in a table
-app.put('/:table/:recordID', (req, res) => {
+app.put('/:table/:keyParts', (req, res) => {
   const table = req.params.table; 
-  const recordID = req.params.recordID;
+  const keyParts = req.params.keyParts.split('&');
+
+  const whereClauseParts = keyParts.map(part => {
+    const [colName, value] = part.split('=');
+    return `${colName} = ?`;
+  });
+  const whereClause = whereClauseParts.join(' AND ');
+
   const record = req.body.record; 
   if (!validate(record, `${table}`, 0)){ 
     console.log('Invalid Data'); 
@@ -97,8 +100,8 @@ app.put('/:table/:recordID', (req, res) => {
   }
 
   const temp = Object.keys(record).map(key => `${key} = ?`).join(', ');
-  const sqlQuery = `UPDATE ?? SET ${temp} WHERE ?? = ?`;
-  const values = [table, ...Object.values(record), `${table}ID`, recordID];
+  const sqlQuery = `UPDATE ?? SET ${temp} WHERE ${whereClause}`;
+  const values = [table, ...Object.values(record), ...keyParts.map(part => part.split('=')[1])];
 
   db.query(sqlQuery, values, (err, results) => {
     if(err){
@@ -122,7 +125,7 @@ app.delete('/:table/:keyParts', (req, res) => {
   const values = [table, ...keyParts.map(part => part.split('=')[1])];
   console.log(whereClause);
   const sqlQuery = `DELETE FROM ?? WHERE ${whereClause}`; 
-  
+
   db.query(sqlQuery, values, (err, results) => {
     if(err){
       return res.status(500).send(err);

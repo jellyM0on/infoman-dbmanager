@@ -3,11 +3,11 @@ const tablinks = document.getElementsByClassName("tablinks");
 let currentTable = 'applicant'; 
 let currentData; 
 
-displayTable(tablinks[0], 'applicant'); 
+displayTable('applicant'); 
 
 //display table
-async function displayTable(tableLink, table){
-    console.log('test');
+async function displayTable(table){
+    const tableLink = getTablink(table); 
     highlightTablink(tableLink);
     let data = await getData(table); 
     currentData = data; 
@@ -17,7 +17,7 @@ async function displayTable(tableLink, table){
 //tablinks
 for (const tablink of tablinks){
     tablink.addEventListener('click', (e) => {
-      displayTable(e.currentTarget, tablink.id); 
+      displayTable(tablink.id); 
     })
 }
 
@@ -99,14 +99,7 @@ function addActions(parentCont, data){
     const updateIcon = document.createElement('img'); 
     updateIcon.src = 'assets/update.svg';
     updateBtn.appendChild(updateIcon); 
-    updateBtn.addEventListener('click', () => updateData(currentTable, data));  
-
-    // const viewBtn = document.createElement('button'); 
-    // viewBtn.className = 'view-btn'
-    // const viewIcon = document.createElement('img'); 
-    // viewIcon.src = 'assets/view.svg'; 
-    // viewBtn.appendChild(viewIcon); 
-    // viewBtn.addEventListener('click', () => updateData(currentTable, data));  
+    updateBtn.addEventListener('click', (e) => handleUpdate(e.target)); 
 
     const deleteBtn = document.createElement('button'); 
     deleteBtn.className = 'delete-btn'
@@ -150,18 +143,17 @@ createRecordBtn.addEventListener('click', () => {
         type: "Public"
     }
     createData('school', test);
-    displayTable(tablinks[3], 'school');
+    displayTable('school');
 })
 
 //update record
-async function updateData(table, record){
+async function updateData(table, keys){
+    const keyParts = keys.map(({ key, value }) => `${key}=${encodeURIComponent(value)}`).join('&');
+    const url = `http://localhost:3000/${table}/${keyParts}`;
+
     try{
-        const response = await fetch(`http://localhost:3000/${table}/${record}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json' 
-            },
-            body: JSON.stringify(record)
+        const response = await fetch(url, {
+            method: 'PUT'
         });
         const status = await response.json(); 
         console.log(status); 
@@ -187,6 +179,7 @@ async function deleteData(table, keys){
     }
 }
 
+// handle delete
 async function handleDelete(node){
     const row = node.parentNode.parentNode.parentNode.parentNode; 
     const rowIndex = row.id; 
@@ -204,9 +197,9 @@ async function handleDelete(node){
         ];
         status = await deleteData(currentTable, keys);
     }
-    
+
     if(status == 'Deleted'){
-        displayTable(getTablink(currentTable), currentTable);    
+        displayTable(currentTable);    
     }
 }
 
@@ -215,5 +208,39 @@ function getTablink(table){
         if (tablinks[i].id == table){
             return tablinks[i]; 
         }
+    }
+}
+
+//handle update
+async function handleUpdate(node){
+    const row = node.parentNode.parentNode.parentNode.parentNode; 
+    const rowIndex = row.id; 
+    const record = currentData[rowIndex];
+    let status; 
+    if(currentTable == 'family'){
+        const keys = [
+            {key: 'applicantID', value: record.applicantID}, 
+            {key: 'relation_type', value: record.relation_type}
+        ];
+        status = await updateData(currentTable, keys); 
+    } else {
+        const keys = [
+            {key: `${currentTable}ID`, value: record[`${currentTable}ID`]}, 
+        ];
+        status = await updateData(currentTable, keys);
+    }
+
+    if(status == 'Updated'){
+        displayTable(currentTable);    
+    }
+}
+
+//handle create 
+async function handleCreate(){
+    // get fields
+    const record = {test:"test"}
+    let status = await createData(currentTable, record); 
+    if(status == 'Inserted'){
+        displayTable(currentTable); 
     }
 }
