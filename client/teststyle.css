@@ -196,16 +196,33 @@ th:nth-child(1){
     justify-content: center;
     width: 100%;
     position: relative;
+    gap: 0.5em;
 }
 
 .table-actions button{
-    border: none; 
+    border: none;
     background-color:inherit;
     cursor: pointer;
 }
 
 .table-actions img{
     width: 1.5em;
+}
+
+.table-actions .update-btn:hover {
+    box-sizing: border-box;
+    background-color: #fe7500;
+    border-radius: 5px;
+  }
+    
+.table-actions .delete-btn:hover {
+  box-sizing: border-box;
+  background-color: #ea0000;
+  border-radius: 5px;
+}
+
+.table-actions button:hover img{
+    filter: invert(1);
 }
 
 .table-actions .view-btn img{
