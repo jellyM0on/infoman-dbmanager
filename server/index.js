@@ -58,7 +58,7 @@ app.get('/:table', (req, res) => {
 //get record from table 
 app.get('/:table/:recordID', (req, res) => {
   const table = req.params.table; 
-  const recordID = parseInt(req.params.recordID); 
+  const recordID = req.params.recordID; 
   const sqlQuery = `SELECT * FROM ?? WHERE ?? = ?`;
 
   const values = [table, table + 'ID', recordID]; 
@@ -109,16 +109,25 @@ app.put('/:table/:recordID', (req, res) => {
 });
 
 //delete record in a table
-app.delete('/:table/:recordID', (req, res) => {
+app.delete('/:table/:keyParts', (req, res) => {
   const table = req.params.table; 
-  const recordID = parseInt(req.params.recordID);
-  const sqlQuery = `DELETE FROM ?? WHERE ?? = ?`; 
-  const values = [table, `${table}ID`, recordID]
+  const keyParts = req.params.keyParts.split('&');
+
+  const whereClauseParts = keyParts.map(part => {
+    const [colName, value] = part.split('=');
+    return `${colName} = ?`;
+  });
+  const whereClause = whereClauseParts.join(' AND ');
+
+  const values = [table, ...keyParts.map(part => part.split('=')[1])];
+  console.log(whereClause);
+  const sqlQuery = `DELETE FROM ?? WHERE ${whereClause}`; 
+  
   db.query(sqlQuery, values, (err, results) => {
     if(err){
       return res.status(500).send(err);
     } 
-    if (this.changes === 0) {
+    if (results.affectedRows === 0) {
       res.status(404).json({ error: 'Not found' })
     } else {
       res.json('Deleted')
