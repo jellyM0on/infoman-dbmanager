@@ -1,5 +1,7 @@
 const tablinks = document.getElementsByClassName("tablinks");
 
+let currentTable = 'applicant'; 
+
 displayTable(tablinks[0], 'applicant'); 
 
 //display table
@@ -24,6 +26,7 @@ function highlightTablink(tablink){
         tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
     tablink.className += " active";
+    currentTable = tablink.id; 
 }
 
 //fetch data of a table
@@ -53,7 +56,12 @@ function createTable(data){
     const table = document.createElement('table');
     const headerRow = document.createElement('tr');
     const keys = Object.keys(data[0]);
-    keys.forEach(key => {
+    keys.forEach((key, i) => {
+        if(i == 0){
+            const th = document.createElement('th');
+            th.textContent = 'Actions';
+            headerRow.appendChild(th);
+        }
         const th = document.createElement('th');
         th.textContent = key;
         headerRow.appendChild(th);
@@ -62,7 +70,10 @@ function createTable(data){
 
     data.forEach(item => {
         const row = document.createElement('tr');
-        keys.forEach(key => {
+        keys.forEach((key,i) => {
+            if(i == 0){
+               addActions(row, data); 
+            } 
             const td = document.createElement('td');
             td.textContent = item[key];
             row.appendChild(td);
@@ -70,6 +81,40 @@ function createTable(data){
         table.appendChild(row);
     });
     container.appendChild(table); 
+}
+
+function addActions(parentCont, data){
+    const cell = document.createElement('td'); 
+    const actionsCont = document.createElement('div'); 
+    actionsCont.className = 'table-actions'
+    
+
+    const updateBtn = document.createElement('button'); 
+    updateBtn.className = 'update-btn'
+    const updateIcon = document.createElement('img'); 
+    updateIcon.src = 'assets/update.svg';
+    updateBtn.appendChild(updateIcon); 
+    updateBtn.addEventListener('click', () => updateData(currentTable, data));  
+
+    // const viewBtn = document.createElement('button'); 
+    // viewBtn.className = 'view-btn'
+    // const viewIcon = document.createElement('img'); 
+    // viewIcon.src = 'assets/view.svg'; 
+    // viewBtn.appendChild(viewIcon); 
+    // viewBtn.addEventListener('click', () => updateData(currentTable, data));  
+
+    const deleteBtn = document.createElement('button'); 
+    deleteBtn.className = 'delete-btn'
+    const deleteIcon = document.createElement('img'); 
+    deleteIcon.src = 'assets/delete.svg'; 
+    deleteBtn.appendChild(deleteIcon); 
+    deleteBtn.addEventListener('click', () => deleteData(currentTable, data));  
+
+    // actionsCont.appendChild(viewBtn); 
+    actionsCont.appendChild(updateBtn); 
+    actionsCont.appendChild(deleteBtn); 
+    cell.appendChild(actionsCont)
+    parentCont.appendChild(cell); 
 }
 
 //create record
@@ -119,7 +164,7 @@ async function updateData(table, record){
 }
 
 //delete record
-async function updateData(table, record){
+async function deleteData(table, record){
     try{
         const response = await fetch(`http://localhost:3000/${table}/${record}`, {
             method: 'DELETE',

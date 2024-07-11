@@ -3,8 +3,12 @@ h1, p{
     margin: 0;
 }
 
+button{
+    font-family: monospace;
+}
+
 body {
-    font-family: sans-serif;
+    font-family: monospace;
     margin: 0; 
     height: fit-content; 
     /* overflow-y: hidden;  */
@@ -155,8 +159,8 @@ th{
     padding: 1em;
     border: dotted rgba(0, 0, 0, 0.128) 1px; 
     box-sizing: border-box;
-
 }
+
 
 td, tr{
     border: dotted rgba(0, 0, 0, 0.128) 1px; 
@@ -167,7 +171,54 @@ td{
     background-color: white;
 } 
 
+tr:hover td {
+    background-color: #128bef28;
+}
 
+tr:hover td:first-child {
+    background-color: white;
+}
+
+td:nth-child(1),
+th:nth-child(1){
+    position: sticky;
+    left: 0; 
+    z-index: 98;
+}
+
+th:nth-child(1){
+    z-index: 100;
+}
+
+.table-actions{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+}
+
+.table-actions button{
+    border: none; 
+    background-color:inherit;
+    cursor: pointer;
+}
+
+.table-actions img{
+    width: 1.5em;
+}
+
+.table-actions .view-btn img{
+    filter: brightness(0) saturate(100%) invert(39%) sepia(38%) saturate(3048%) hue-rotate(188deg) brightness(99%) contrast(89%);
+}
+
+.table-actions .update-btn img{
+    filter: brightness(0) saturate(100%) invert(69%) sepia(71%) saturate(4378%) hue-rotate(354deg) brightness(96%) contrast(94%);
+}
+
+.table-actions .delete-btn img{
+    filter: brightness(0) saturate(100%) invert(22%) sepia(69%) saturate(2944%) hue-rotate(345deg) brightness(88%) contrast(110%);
+}
 
 #table-container{
     margin: 1em 0 0 0;
