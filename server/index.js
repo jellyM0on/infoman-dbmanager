@@ -41,8 +41,9 @@ function getQuery(sqlQuery, values, res){
 };
 
 //get results from a custom query 
-app.get('/query', (req, res) => {
+app.post('/query', (req, res) => {
   const sqlQuery = `${req.body.sqlQuery}`; 
+  console.log(req.body);
   if(!sqlQuery) return res.status(400).send('Empty Query'); 
   getQuery(sqlQuery, '', res); 
 })

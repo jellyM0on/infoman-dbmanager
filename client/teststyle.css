@@ -123,7 +123,7 @@ main{
 }
 
 #create-record{
-    background-color: white;
+background-color: white;
    border: none; 
    cursor: pointer;
    transition: 0.3s;
@@ -248,3 +248,50 @@ th:nth-child(1){
     max-width: 90vw;
 }
 
+/* query page */
+#query-container{
+    width: 100%;
+    display: flex; 
+    align-items: center;
+    /* justify-content: center; */
+    gap: 2em;
+    box-sizing: border-box;
+    margin-bottom: 2em;
+}
+
+#query-container button{
+    background-color: white;
+    border: none; 
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 10px;
+    font-size: smaller;
+    padding: 0px 16px;
+    border:dashed #08742e 1px;
+    width: fit-content;
+    height: 3em;
+}
+
+#query-container button:hover{
+    background-color: #08742e;
+    color: white;
+}
+
+#query-container textarea{
+    width: 90%;
+    resize:vertical;
+    overflow:auto;
+    height: 1em;
+    padding: 1em;
+    border: dotted black 1px;
+}
+
+#results-container > #table-container{
+    padding-top: 1em;
+    border-top: dotted black 1px;
+}
+
+#results-container td:nth-child(1),
+#results-container th:nth-child(1){
+    position: unset;
+}
