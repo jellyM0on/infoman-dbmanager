@@ -45,6 +45,19 @@ async function getData(table){
     }
 }
 
+async function getRecord(table, record){
+    try{
+        const response = await fetch(`http://localhost:3000/${table}/${record}`, {
+            method: 'GET',
+        });
+        const data = await response.json(); 
+        console.log(data); 
+        return data;
+    } catch(err){
+        console.log(err); 
+    }
+}
+
 //create table in UI
 function createTable(data){
     //remove existing table
@@ -190,7 +203,8 @@ async function handleDelete(node){
             {key: 'ApplicantID', value: record.ApplicantID}, 
             {key: 'Relation_Type', value: record.Relation_Type}
         ];
-        deleteConfirm(currentTable, keys);  
+        deleteConfirm(currentTable, keys); 
+        adjustCombinedIncome(record.ApplicantID, record.Monthly_Income, 0); 
     } else {
         const keys = [
             {key: `${currentTable}ID`, value: record[`${currentTable}ID`]}, 
@@ -271,12 +285,20 @@ function viewRecord(record){
                 {key: 'Relation_Type', value: record.Relation_Type}
             ];
             status = await updateData(currentTable, keys, updates); 
+
+            if(updatedRecord.hasOwnProperty('Monthly_Income')){
+                console.log(true); 
+                adjustCombinedIncome(record.ApplicantID, record.Monthly_Income, updatedRecord.Monthly_Income); 
+            }
+
+
         } else {
             const keys = [
                 {key: `${currentTable}ID`, value: record[`${currentTable}ID`]}, 
             ];
             status = await updateData(currentTable, keys, updates); 
         }
+
 
         if(status){
             main.removeChild(modal);
@@ -525,6 +547,16 @@ function getEducBackgroundInput() {
     });
 
     return educationalData;
+}
+
+async function adjustCombinedIncome(applicantID, oldIncome, newIncome){
+    //get original income 
+    const recordData = await getRecord('Applicant', applicantID); 
+    let income = recordData[0].Combined_Monthly_Income - parseInt(oldIncome); 
+    let updatedIncome = income + parseInt(newIncome); 
+
+    //update combined income
+    updateData('Applicant', [{key: 'ApplicantID', value: applicantID}], [{key: 'Combined_Monthly_Income', value: updatedIncome}]); 
 }
 
 
