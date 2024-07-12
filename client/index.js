@@ -603,8 +603,17 @@ function closeModal(modal) {
 
 function addEducBackground(){
     let sectionCount = 1;
+    const educationContainer = document.querySelector('#education-container')
     const educationSection = document.querySelector('.education-section');
+    const deleteBtn = document.createElement('button'); 
+
     const newSection = educationSection.cloneNode(true);
+    deleteBtn.textContent = 'Delete';
+    deleteBtn.className ='remove-education-button'
+    deleteBtn.addEventListener('click', () => {
+        educationContainer.removeChild(newSection);
+    });
+    newSection.append(deleteBtn); 
     const inputs = newSection.querySelectorAll('input');
     inputs.forEach(input => {
       const idParts = input.id.split('-');

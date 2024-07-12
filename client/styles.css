@@ -568,9 +568,14 @@ th:nth-child(1){
       cursor: pointer;
       margin: 10px 5px;
   }
+
+  .education-section fieldset{
+    margin-bottom: 0;
+  }
+
   
   .modal-body .remove-education-button {
-      background-color: #ff8164;
+      background-color: #ea0000;
       color: white;
       padding: 10px 20px;
       border: none;
