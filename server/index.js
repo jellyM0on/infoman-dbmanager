@@ -2,7 +2,6 @@ const express = require('express')
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const { validate } = require('./validateInput');
 
 require('dotenv').config({path: '../.env'});
 
@@ -95,17 +94,16 @@ app.put('/:table/:keyParts', (req, res) => {
   const table = req.params.table;
   const keyParts = req.params.keyParts.split('&');
 
-// Construct WHERE clause
+//construct WHERE clause
   const whereClauseParts = keyParts.map(part => {
     const [colName, value] = part.split('=');
     return `${colName} = ?`;
   });
   const whereClause = whereClauseParts.join(' AND ');
 
-// Extract record data from request body
-  const records = req.body.record; // Assuming records is an array of objects
+  const records = req.body.record; 
 
-// Prepare values for the query
+  //set clause
   let values = [];
   const setClauses = records.map(record => {
     const columnName = record.key; // Assuming the key is the column name
@@ -114,15 +112,11 @@ app.put('/:table/:keyParts', (req, res) => {
     return `${columnName} = ?`;
 });
 
-// Combine all SET clauses into a single string
   const setClause = setClauses.join(', ');
 
-// Prepare additional WHERE clause values
   const whereValues = keyParts.map(part => part.split('=')[1]);
   values = [...values, ...whereValues];
 
-
-  // Construct the SQL query
   const sqlQuery = `UPDATE ${table} SET ${setClause} WHERE ${whereClause}`;
   console.log(sqlQuery); 
   db.query(sqlQuery, values, (err, results) => {

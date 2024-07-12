@@ -419,7 +419,6 @@ async function handleRecordSubmit(){
 }
 }
 
-
 function getApplicantInput(totalMonthlyIncome) {
     const inputs = {
         ApplicantID: document.getElementById('id-number').value,
