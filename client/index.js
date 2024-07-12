@@ -349,6 +349,7 @@ function handleCreate(){
 // --------------------------------------- for popup  -------------------------------------------
 
 async function handleRecordSubmit(){
+    try{
     const familyInput = getFamilyInput();
     
     let totalMonthlyIncome = 0;
@@ -361,8 +362,6 @@ async function handleRecordSubmit(){
 
     const applicantInput = getApplicantInput(totalMonthlyIncome); 
     const educBackgroundInput = getEducBackgroundInput(); 
-    
-
 
    // post applicant info to applicant table 
     const applicantData = await createData('Applicant', applicantInput); 
@@ -397,7 +396,6 @@ async function handleRecordSubmit(){
             Honors: input.honors, 
         }
 
-    
         const backgroundData = await createData('Educ_Background', backgroundRecord)
     })
 
@@ -414,10 +412,11 @@ async function handleRecordSubmit(){
         const familyData = await createData('Family', familyRecord)
     })
 
-    if(applicantData){
-        createPopup('New record created', 'success')
-    }
+    createPopup('New record created', 'success')
     displayTable(currentTable); 
+} catch (err){
+    createPopup('Invalid inputs!', 'error');
+}
 }
 
 

@@ -9,6 +9,10 @@ async function submitQuery(){
     const queryInput = document.getElementById('query-input'); 
     const query = queryInput.value;
     const results = await getResults(query); 
+    if(!Array.isArray(results)){
+        createErrorPopup('Invalid input! Please submit another query.'); 
+        return;
+    }
     createTable(results); 
 }
 
@@ -23,7 +27,6 @@ async function getResults(query){
             body: JSON.stringify({ sqlQuery: query })
         });
         const data = await response.json(); 
-        console.log(data)
         return data
     } catch(err){
         createErrorPopup('Invalid input! Please submit another query.'); 
