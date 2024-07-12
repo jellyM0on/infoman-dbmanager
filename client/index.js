@@ -349,9 +349,20 @@ function handleCreate(){
 // --------------------------------------- for popup  -------------------------------------------
 
 async function handleRecordSubmit(){
-    const applicantInput = getApplicantInput(); 
-    const educBackgroundInput = getEducBackgroundInput(); 
     const familyInput = getFamilyInput();
+    
+    let totalMonthlyIncome = 0;
+
+    familyInput.forEach(member => {
+        totalMonthlyIncome += member.monthlyIncome;
+    });
+
+    console.log(totalMonthlyIncome);
+
+    const applicantInput = getApplicantInput(totalMonthlyIncome); 
+    const educBackgroundInput = getEducBackgroundInput(); 
+    
+
 
    // post applicant info to applicant table 
     const applicantData = await createData('Applicant', applicantInput); 
@@ -403,12 +414,14 @@ async function handleRecordSubmit(){
         const familyData = await createData('Family', familyRecord)
     })
 
-    createPopup('New record created', 'success')
+    if(applicantData){
+        createPopup('New record created', 'success')
+    }
     displayTable(currentTable); 
 }
 
 
-function getApplicantInput() {
+function getApplicantInput(totalMonthlyIncome) {
     const inputs = {
         ApplicantID: document.getElementById('id-number').value,
         Applicant_Name: document.getElementById('applicant-name').value,
@@ -427,7 +440,7 @@ function getApplicantInput() {
         Expected_Date_Grad: document.getElementById('expect-grad').value === '' ? null : parseInt(document.getElementById('expect-grad').value),
         Mode_of_Receipt: document.querySelector('input[name="Mode_of_Receipt"]:checked').value,
         Cash_Card_No: document.getElementById('cash-card').value === '' ? null : parseInt(document.getElementById('cash-card').value),
-        Combined_Monthly_Income: parseInt(document.getElementById('combined-income').value)
+        Combined_Monthly_Income: totalMonthlyIncome
     };
     return inputs; 
 }; 
@@ -662,7 +675,6 @@ function fillFormWithDummyData() {
         Expect_Date_Grad: "2025",
         Mode_of_Receipt: "Cash-Card",
         Cash_Card_No: "9876543210",
-        Combined_Monthly_Income: "50000",
         Father_Name: "Michael Doe",
         Relation_Type: "Father",
         Occupation: "Teacher",
@@ -690,7 +702,6 @@ function fillFormWithDummyData() {
     document.getElementById('expect-grad').value = dummyData.Expect_Date_Grad;
     document.getElementById(dummyData.Mode_of_Receipt.toLowerCase()).checked = true;
     document.getElementById('cash-card').value = dummyData.Cash_Card_No;
-    document.getElementById('combined-income').value = dummyData.Combined_Monthly_Income;
     
     // Family Information
     document.getElementById('father-name').value = dummyData.Father_Name;

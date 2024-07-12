@@ -56,24 +56,31 @@ CREATE TABLE `Family` (
     `Occupation` VARCHAR(40) NOT NULL COMMENT 'Occupation of the Parent/Guardian',
     `Monthly_Income` INT(6) NOT NULL COMMENT 'Monthly income of the Parent/Guardian',
     PRIMARY KEY (`ApplicantID`, `Relation_Type`),
-    FOREIGN KEY (`ApplicantID`) REFERENCES `Applicant` (`ApplicantID`)
+    FOREIGN KEY (`ApplicantID`)
+        REFERENCES `Applicant` (`ApplicantID`)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
 CREATE TABLE `Educ_Background` (
     `Educ_BackgroundID` INT AUTO_INCREMENT PRIMARY KEY,
     `ApplicantID` VARCHAR(20) NOT NULL COMMENT 'Unique identifier for each Applicant',
     `SchoolID` INT NOT NULL COMMENT 'Unique identifier for each School',
-    `Level` CHAR(2) NOT NULL COMMENT 'Level of the student attended during the time of their school
-        E - Elementary
-        JH - Junior High
-        SH - Senior High
-        T - Tertiary',
-        CHECK (`Level` IN ('E','JH', 'SH', 'T')),
+    `Level` CHAR(2) NOT NULL COMMENT 'Level of the student attended during the time of their school',
     `Inclusive_Years` VARCHAR(15) NOT NULL COMMENT 'Range of the year the student attended',
     `Honors` VARCHAR(20) NULL COMMENT 'Honors received during their time',
-    FOREIGN KEY (`ApplicantID`) REFERENCES `Applicant` (`ApplicantID`),
-    FOREIGN KEY (`SchoolID`) REFERENCES `School` (`SchoolID`)
+    CONSTRAINT `fk_Educ_Background_ApplicantID`
+        FOREIGN KEY (`ApplicantID`)
+        REFERENCES `Applicant` (`ApplicantID`)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT `fk_Educ_Background_SchoolID`
+        FOREIGN KEY (`SchoolID`)
+        REFERENCES `School` (`SchoolID`)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 ) ENGINE = InnoDB;
+
 
 INSERT INTO `Applicant` (`ApplicantID`, `Applicant_Name`, `GWA`, `Gender`, `Age`, `Date_of_Birth`, `Religion`, `Address`, `Civil_Stat`, `Place_Birth`, `Mobile_No`, `Email_Ad`, `Current_Level`, `Course`, `Expected_Date_Grad`, `Mode_of_Receipt`, `Cash_Card_No`, `Combined_Monthly_Income`)
 VALUES
