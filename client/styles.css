@@ -363,10 +363,6 @@ th:nth-child(1){
 
   /* modal */
 
-  *, *::after, *::before {
-    box-sizing: border-box;
-  }
-  
   .modal {
     position: fixed;
     top: 50%;
@@ -458,9 +454,17 @@ th:nth-child(1){
       margin-bottom: 35px;
   }
   
-  label {
-      display: block;
+    label {
       margin-bottom: 2px;
+      font-size: 1em;
+      font-weight: bold;
+  }
+
+  .req-dec {
+    color:#ea0000;
+  }
+  *, *::after, *::before {
+    box-sizing: border-box;
   }
   
   input[type="text"],
@@ -513,19 +517,33 @@ th:nth-child(1){
   .modereceipt-container,
   .level-container {
       display: flex;
-      justify-content: center;
+      justify-content: left;
       gap: 20px;
-      margin-bottom: 15px;
+      margin-bottom: 1em;
   }
+.civilstat-container,
+.curlevel-container{
+    margin-top: 1em;
+}
+
   
   .gender-container label,
   .civilstat-container label, 
   .curlevel-container label,
   .modereceipt-container label,
   .level-container label {
+      font-weight: 100;
       display: flex;
       align-items: center;
       gap: 10px;
+  }
+
+  .gender-container p,
+  .civilstat-container p, 
+  .curlevel-container p,
+  .modereceipt-container p,
+  .level-container p{
+    font-weight: bold;
   }
   
   .submitted-data {

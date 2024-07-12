@@ -47,52 +47,61 @@
               <form id="scholarship-form">
                 <fieldset>
                   <h2>APPLICANT'S PERSONAL INFORMATION</h2>
-                  <label for="id-number">ID Number: <input id="id-number" name="ID_Num" type="text" value="Your ID Number" required /></label>
-                  <label for="applicant-name">Name of the applicant: <input id="applicant-name" name="Applicant_Name" type="text" required /></label>
-                  <label for="gwa">GWA: <input id="gwa" name="GWA" type="number" step="0.01" min="1.0" max="5.0" required /></label>
-                  <h3>Gender</h3>
+                  <br>
+                  <p>Fields with <span class="req-dec">*</span> are required</p>
+                  <br>
+                  <label for="id-number"><span class="req-dec">*</span>ID Number: <input id="id-number" name="ID_Num" type="text" value="Your ID Number" required /></label>
+                  <label for="applicant-name"><span class="req-dec">*</span>Name of the applicant: <input id="applicant-name" name="Applicant_Name" type="text" required /></label>
+                  <label for="gwa"><span class="req-dec">*</span>GWA: <input id="gwa" name="GWA" type="number" step="0.01" min="1.0" max="5.0" required /></label>
                   <div class="gender-container">
+                    <p><span class="req-dec">*</span>Gender: </p>
                     <label for="male"><input id="male" type="radio" name="Gender" value="M" class="inline" checked /> Male</label>
                     <label for="female"><input id="female" type="radio" name="Gender" value="F" class="inline" /> Female</label>
                   </div>
-                  <label for="age">Age: <input id="age" name="Age" type="number" min="1" max="100" required /></label>
-                  <label for="date-birth">Date of Birth: <input id="date-birth" name="Date_of_Birth" type="date" required /></label>
-                  <h3>Civil Status</h3>
+                  <label for="age"><span class="req-dec">*</span>Age: <input id="age" name="Age" type="number" min="1" max="100" required /></label>
+                  <label for="date-birth"><span class="req-dec">*</span>Date of Birth: <input id="date-birth" name="Date_of_Birth" type="date" required /></label>
                   <div class="civilstat-container">
+                    <p><span class="req-dec">*</span>Civil Status:</p>
                     <label for="single"><input id="single" type="radio" name="Civil_Stat" value="S" class="inline" checked /> Single</label>
                     <label for="married"><input id="married" type="radio" name="Civil_Stat" value="M" class="inline" /> Married</label>
                     <label for="widowed"><input id="widowed" type="radio" name="Civil_Stat" value="W" class="inline" /> Widowed</label>
                   </div>
-                  <label for="religion">Religion: <input id="religion" name="Religion" type="text" required /></label>
-                  <label for="address">Address: <input id="address" name="Address" type="text" required /></label>
-                  <label for="place-birth">Place of Birth: <input id="place-birth" name="Place_Birth" type="text" required /></label>
-                  <label for="mobile-number">Mobile Number: <input id="mobile-number" name="Mobile-No" type="number" required /></label>
-                  <label for="e-mail">Email: <input id="e-mail" name="Email_Ad" type="email" required /></label>
-                  <h3>Current School Level</h3>
+                  <label for="religion"><span class="req-dec">*</span>Religion: <input id="religion" name="Religion" type="text" required /></label>
+                  <label for="address"><span class="req-dec">*</span>Address: <input id="address" name="Address" type="text" required /></label>
+                  <label for="place-birth"><span class="req-dec">*</span>Place of Birth: <input id="place-birth" name="Place_Birth" type="text" required /></label>
+                  <label for="mobile-number"><span class="req-dec">*</span>Mobile Number: <input id="mobile-number" name="Mobile-No" type="number" required /></label>
+                  <label for="e-mail"><span class="req-dec">*</span>Email: <input id="e-mail" name="Email_Ad" type="email" required /></label>
+                  <br><br>
+                  <h3>Current School</h3>
+                  <br>
                   <div class="curlevel-container">
+                    <p><span class="req-dec">*</span>Current School Level:</p>
                     <label for="elementary-curr"><input id="elementary-curr" type="radio" name="Current_Level" value="E" class="inline" checked /> Elementary</label>
                     <label for="junior-high-curr"><input id="junior-high-curr" type="radio" name="Current_Level" value="JH" class="inline" /> Junior High</label>
                     <label for="senior-high-curr"><input id="senior-high-curr" type="radio" name="Current_Level" value="SH" class="inline" /> Senior High</label>
                     <label for="tertiary-curr"><input id="tertiary-curr" type="radio" name="Current_Level" value="T" class="inline" /> Tertiary</label>
                   </div>
-                  <label for="course">Course: <input id="course" name="Course" type="text" required /></label>
+                  <label for="course"><span class="req-dec">*</span>Course: <input id="course" name="Course" type="text" required /></label>
                   <label for="expect-grad">Expected date of graduation: <input id="expect-grad" name="Expect-Date_Grad" type="number"/></label>
                   
-                  <h3>Mode of Receipt</h3>
+                  <h3>Account Details</h3>
+                  <br>
                   <div class="modereceipt-container">
+                    <p><span class="req-dec">*</span>Mode of Receipt:</p>
                     <label for="mode-receipt"><input id="mode-receipt" type="radio" name="Mode_of_Receipt" value="CC" class="inline" checked /> Cash Card</label>
                     <label for="payroll"><input id="payroll" type="radio" name="Mode_of_Receipt" value="P" class="inline" /> Payroll</label>
-                 
                 </div>
-                  <label for="cash-card" id="cash-card-cont">Cash Card Number: <input id="cash-card" name="Cash_Card_No" type="number"/></label>
+                  <label for="cash-card" id="cash-card-cont"><span class="req-dec">*</span>Cash Card Number: <input id="cash-card" name="Cash_Card_No" type="number"/></label>
                   <!-- <label for="combined-income">Combined Monthly Income: <input id="combined-income" name="Combined_Monthly_Income" type="number" min="0" max="999999" required/></label> -->
                 </fieldset>
   
                 <fieldset id="family-information">
                   <h2>FAMILY INFORMATION</h2>
-                  <p>Please list at least one guardian</p>
+                  <br>
+                  <p><span class="req-dec">*</span>Please list at least one guardian</p>
                   <br>
                   <div>
+                    <h3>Father</h3>
                     <label for="father-name">Name of Guardian: <input id="father-name" name="Father_Name" type="text"/></label>
                     <label for="relation-type">Type of Relation:
                         <select id="relation-type" name="Relation_Type">
@@ -103,6 +112,7 @@
                    </div>
                    <hr>
                    <div>
+                    <h3>Mother</h3>
                     <label for="mother-name">Name of Guardian: <input id="mother-name" name="Mother_Name" type="text"/></label>
                     <label for="relation-type">Type of Relation:
                         <select id="relation-type" name="Relation_Type">
@@ -113,6 +123,7 @@
                    </div>
                    <hr>
                    <div>
+                    <h3>Guardian</h3>
                     <label for="guardian-name">Name of Guardian: <input id="guardian-name" name="Guardian_Name" type="text"/></label>
                     <label for="relation-type">Type of Relation:
                         <select id="relation-type" name="Relation_Type">
@@ -130,16 +141,16 @@
                   <div class="education-section">
                     <fieldset>
                       <!-- if school already exists in the database  -->
-                      <label for="school-select">School </label>
+                      <label for="school-select"><span class="req-dec">*</span>School:</label>
                       <select name="School" id="school-select">
-                        <option value="none">(NOT IN LIST)</option>
+                        <option value="none">Select school...</option>
                       </select>
 
                        <!-- if does not exist yet, and we want to add it  -->
                       <br>
                       <p>If your school is not in the dropdown list, please fill out the fields below</p>
                       <br>
-                      <label for="school-name-0">Name of School: <input id="school-name-0" name="School_Name" type="text"/></label>
+                      <label for="school-name-0">Name of School:<input id="school-name-0" name="School_Name" type="text"/></label>
                       <label for="school-location-0">Location of School: <input id="school-location-0" name="School_Location" type="text"/></label>
                       <label for="school-type-0">Type of School:
                         <select id="relation-type-0" name="Relation_Type">
@@ -147,14 +158,14 @@
                           <option value="Private">Private</option>
                         </select>
                       </label>
-                      <h3>Level of School</h3>
                       <div class="level-container">
+                        <p><span class="req-dec">*</span>Level of School:</p>
                         <label for="school-elem-0"><input id="school-elem-0" type="radio" name="Level-0" value="E" class="inline"/> Elementary</label>
                         <label for="school-junior-0"><input id="school-junior-0" type="radio" name="Level-0" value="JH" class="inline" /> Junior High</label>
                         <label for="school-senior-0"><input id="school-senior-0" type="radio" name="Level-0" value="SH" class="inline" /> Senior High</label>
-                        <label for="school-tertiary-0"><input id="school-tertiary-0" type="radio" name="Level-0" value="T" class="inline" /> Tertiary</label>
+                        <label for="school-tertiary-0"><input id="school-tertiary-0" type="radio" name="Level-0" value="T" class="inline" checked /> Tertiary</label>
                       </div>
-                      <label for="inclusive-years-0">Inclusive years: <input id="inclusive-years-0" name="Inclusive_Years" type="text" required/></label>
+                      <label for="inclusive-years-0"><span class="req-dec">*</span>Inclusive years: <input id="inclusive-years-0" name="Inclusive_Years" type="text" required/></label>
                       <label for="honors-0">Honors, if applicable: <input id="honors-0" name="Honors" type="text"/></label>
                     </fieldset>
                   </div>
