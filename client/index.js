@@ -555,31 +555,6 @@ function toggleCashCard(){
     }
 }
 
-// validateGuardians();
-function validateGuardians() {
-    // Check if at least one guardian section is fully filled out
-    const fatherFilled = checkGuardianSection('father-section');
-    const motherFilled = checkGuardianSection('mother-section');
-    const guardianFilled = checkGuardianSection('guardian-section');
-
-    return fatherFilled || motherFilled || guardianFilled;
-}
-
-function checkGuardianSection(sectionId) {
-    const section = document.getElementById(sectionId);
-    const inputs = section.querySelectorAll('#' + sectionId + ' input[type="text"], #' + sectionId + ' input[type="number"], #' + sectionId + ' select');
-   
-    // Check if all inputs in this section are filled
-    return Array.from(inputs).every(input => {
-        // For selects, check selected option value
-        if (input.tagName.toLowerCase() === 'select') {
-            return input.value.trim() !== '';
-        } else {
-            return input.value.trim() !== '';
-        }
-    });
-}
-
 // existing schools dropdown 
 const schoolSelect = document.getElementById('school-select'); 
 setSchoolData(); 
