@@ -302,7 +302,8 @@ th:nth-child(1){
 }
 
 /* error popup */
-.error-popup {
+.error-popup, 
+.success-popup {
     position: absolute;
     top: 20vh;
     left: 0; 
@@ -316,6 +317,26 @@ th:nth-child(1){
     border-radius: 5px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.error-popup button{
+    margin-right: 0.5em;
+    margin-left: 0.5em;
+    border: none;
+}
+
+.error-popup button:hover{
+    background-color: rgb(212, 210, 210);
+    border: none;
+}
+
+.success-popup{
+    background-color:#08742e;
 }
 
 /* scrollbar */
@@ -459,7 +480,7 @@ th:nth-child(1){
   }
   
   input[type="submit"] {
-      background-color: #1e90ff;
+      background-color:#08742e;
       color: white;
       padding: 10px 20px;
       border: none;
@@ -470,7 +491,7 @@ th:nth-child(1){
   }
   
   input[type="submit"]:hover {
-      background-color: #1c86ee;
+      background-color:#08742ee7;
   }
   
   .modal-body form input[type="text"],

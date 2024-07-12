@@ -91,6 +91,7 @@
                 <fieldset id="family-information">
                   <h2>FAMILY INFORMATION</h2>
                   <p>Please list at least one guardian</p>
+                  <br>
                   <div>
                     <label for="father-name">Name of Guardian: <input id="father-name" name="Father_Name" type="text"/></label>
                     <label for="relation-type">Type of Relation:
@@ -100,7 +101,7 @@
                     <label for="father-occupation">Occupation of Guardian: <input id="father-occupation" name="Occupation" type="text"/></label>
                     <label for="father-income">Monthly Income of Guardian: <input id="father-income" name="Monthly_Income" type="number" min="0" max="999999"/></label>
                    </div>
-
+                   <hr>
                    <div>
                     <label for="mother-name">Name of Guardian: <input id="mother-name" name="Mother_Name" type="text"/></label>
                     <label for="relation-type">Type of Relation:
@@ -110,7 +111,7 @@
                     <label for="guardian-occupation">Occupation of Guardian: <input id="guardian-occupation" name="Occupation" type="text" /></label>
                     <label for="guardian-income">Monthly Income of Guardian: <input id="guardian-income" name="Monthly_Income" type="number" min="0" max="999999"/></label>
                    </div>
-
+                   <hr>
                    <div>
                     <label for="guardian-name">Name of Guardian: <input id="guardian-name" name="Guardian_Name" type="text"/></label>
                     <label for="relation-type">Type of Relation:
@@ -135,7 +136,9 @@
                       </select>
 
                        <!-- if does not exist yet, and we want to add it  -->
+                      <br>
                       <p>If your school is not in the dropdown list, please fill out the fields below</p>
+                      <br>
                       <label for="school-name-0">Name of School: <input id="school-name-0" name="School_Name" type="text"/></label>
                       <label for="school-location-0">Location of School: <input id="school-location-0" name="School_Location" type="text"/></label>
                       <label for="school-type-0">Type of School:
@@ -157,6 +160,9 @@
                   </div>
                 </div>
                 <button type="button" id="add-education-button" class="add-education-button">Add More Educational Background</button>
+               <br>
+               <br>
+               <br>
                 <input type="submit" id="submit-modal"/>
               </form>
             </div>

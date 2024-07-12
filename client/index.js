@@ -177,24 +177,25 @@ async function deleteData(table, keys){
 // handle delete
 async function handleDelete(node){
     const row = node.parentNode.parentNode.parentNode.parentNode; 
+    const rowCont = node.parentNode.parentNode.parentNode; 
     const rowIndex = row.id; 
-    const record = currentData[rowIndex];
+    let record = currentData[rowIndex];
+    if(record == undefined) {
+        console.log(rowCont); 
+        record = currentData[rowCont.id];
+    } 
     let status; 
     if(currentTable == 'Family'){
         const keys = [
             {key: 'ApplicantID', value: record.ApplicantID}, 
             {key: 'Relation_Type', value: record.Relation_Type}
         ];
-        status = await deleteData(currentTable, keys); 
+        deleteConfirm(currentTable, keys);  
     } else {
         const keys = [
             {key: `${currentTable}ID`, value: record[`${currentTable}ID`]}, 
         ];
-        status = await deleteData(currentTable, keys);
-    }
-
-    if(status == 'Deleted'){
-        displayTable(currentTable);    
+        deleteConfirm(currentTable, keys); 
     }
 }
 
@@ -210,9 +211,13 @@ function getTablink(table){
 async function handleUpdate(node){
     //input rec must be object 
     const row = node.parentNode.parentNode.parentNode.parentNode; 
+    const rowCont = node.parentNode.parentNode.parentNode; 
     const rowIndex = row.id; 
-    const record = currentData[rowIndex];
-    console.log(record); 
+    let record = currentData[rowIndex];
+    if(record == undefined) {
+        console.log(rowCont); 
+        record = currentData[rowCont.id];
+    } 
     viewRecord(record); 
 }
 
@@ -276,6 +281,7 @@ function viewRecord(record){
         if(status){
             main.removeChild(modal);
             displayTable(currentTable);
+            createPopup('Record updated', 'success')
         }
     })
 
@@ -397,6 +403,7 @@ async function handleRecordSubmit(){
         const familyData = await createData('Family', familyRecord)
     })
 
+    createPopup('New record created', 'success')
     displayTable(currentTable); 
 }
 
@@ -697,4 +704,57 @@ function fillFormWithDummyData() {
     document.getElementById('school-location-0').value = dummyData.School_Location;
     document.getElementById('inclusive-years-0').value = dummyData.Inclusive_Years;
     document.getElementById('honors-0').value = dummyData.Honors;
+}
+
+function createPopup(message, type) {
+    const popup = document.createElement('div');
+    if(type == 'success'){
+        popup.classList.add('success-popup');
+    } 
+    if(type == 'error'){
+        popup.classList.add('error-popup');
+    }
+
+    popup.textContent = message;
+
+    document.body.appendChild(popup);
+
+    setTimeout(() => {
+        popup.remove();
+    }, 4000);
+}
+
+function deleteConfirm(currentTable, keys){
+    console.log(1);
+    const popup = document.createElement('div');
+    popup.className = 'error-popup'
+    const confirmButton = document.createElement('button'); 
+    const cancelButton = document.createElement('button'); 
+
+    confirmButton.textContent = 'Delete'
+    cancelButton.textContent = 'Cancel'
+
+    cancelButton.addEventListener('click', () => {
+        document.body.removeChild(popup); 
+    });
+
+    confirmButton.addEventListener('click', async() => {
+        const status = await deleteData(currentTable, keys);
+        document.body.removeChild(popup); 
+
+        if(status){
+            displayTable(currentTable);    
+            createPopup('Record and dependent records deleted', 'error')
+        }
+    });
+
+    const btnCont = document.createElement('div');
+    btnCont.appendChild(confirmButton);
+    btnCont.appendChild(cancelButton);
+    
+    popup.textContent = 'Are you sure you want to delete this record?';
+
+    popup.appendChild(btnCont);
+    document.body.appendChild(popup);
+
 }
