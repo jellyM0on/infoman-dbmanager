@@ -70,41 +70,64 @@ app.post('/:table', (req, res) => {
   const table = req.params.table; 
   const record = req.body.record; 
   console.log(record);
-  const temp = Object.keys(record).map(() => '?').join(',');
-  const sqlQuery = `INSERT INTO ?? VALUES (${temp})`
-  const values = [table, ...Object.values(record)];
+
+  const columns = Object.keys(record);
+  const placeholders = columns.map(() => '?').join(',');
+  const sqlQuery = `INSERT INTO ${table} (${columns.join(',')}) VALUES (${placeholders})`;
+  const values = Object.values(record);
   
   db.query(sqlQuery, values, (err, results) => {
-    if(err){
-      return res.status(500).send(err);
+    if (err) {
+      console.error('Error executing SQL:', err);
+      return res.status(500).json({ error: 'Database error', details: err });
     }
-    res.json('Inserted');
+
+    if (table === 'School' && results.insertId) {
+      res.json(results.insertId);
+    } else {
+      res.json('Inserted');
+    }
   })
 }); 
 
 //update record in a table
 app.put('/:table/:keyParts', (req, res) => {
-  const table = req.params.table; 
+  const table = req.params.table;
   const keyParts = req.params.keyParts.split('&');
 
+// Construct WHERE clause
   const whereClauseParts = keyParts.map(part => {
     const [colName, value] = part.split('=');
     return `${colName} = ?`;
   });
   const whereClause = whereClauseParts.join(' AND ');
 
-  const record = req.body.record; 
-  if (!validate(record, `${table}`, 0)){ 
-    console.log('Invalid Data'); 
-    return res.status(500); 
-  }
+// Extract record data from request body
+  const records = req.body.record; // Assuming records is an array of objects
 
-  const temp = Object.keys(record).map(key => `${key} = ?`).join(', ');
-  const sqlQuery = `UPDATE ?? SET ${temp} WHERE ${whereClause}`;
-  const values = [table, ...Object.values(record), ...keyParts.map(part => part.split('=')[1])];
+// Prepare values for the query
+  let values = [];
+  const setClauses = records.map(record => {
+    const columnName = record.key; // Assuming the key is the column name
+    const columnValue = record.value;
+    values.push(columnValue); // Push column value to values array
+    return `${columnName} = ?`;
+});
 
+// Combine all SET clauses into a single string
+  const setClause = setClauses.join(', ');
+
+// Prepare additional WHERE clause values
+  const whereValues = keyParts.map(part => part.split('=')[1]);
+  values = [...values, ...whereValues];
+
+
+  // Construct the SQL query
+  const sqlQuery = `UPDATE ${table} SET ${setClause} WHERE ${whereClause}`;
+  console.log(sqlQuery); 
   db.query(sqlQuery, values, (err, results) => {
     if(err){
+      console.log(err);
       return res.status(500).send(err);
     }
     res.json('Updated');
@@ -125,9 +148,10 @@ app.delete('/:table/:keyParts', (req, res) => {
   const values = [table, ...keyParts.map(part => part.split('=')[1])];
   console.log(whereClause);
   const sqlQuery = `DELETE FROM ?? WHERE ${whereClause}`; 
-
+  console.log(sqlQuery);
   db.query(sqlQuery, values, (err, results) => {
     if(err){
+      console.log(err);
       return res.status(500).send(err);
     } 
     if (results.affectedRows === 0) {

@@ -23,10 +23,8 @@ async function getResults(query){
             body: JSON.stringify({ sqlQuery: query })
         });
         const data = await response.json(); 
-        if(results == null || results == undefined){
-            return false;
-        }
-        return data;
+        console.log(data)
+        return data
     } catch(err){
         createErrorPopup('Invalid input! Please submit another query.'); 
     }
@@ -35,6 +33,7 @@ async function getResults(query){
 //create table
 function createTable(data){
     //remove existing table
+    console.log(data);
     const container = document.getElementById('table-container');
   
     while(container.hasChildNodes()){

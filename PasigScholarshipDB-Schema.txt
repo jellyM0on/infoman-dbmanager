@@ -1,0 +1,131 @@
+-- Changed Mobile_No to VARCHAR as it doesnt fit Int min or max value (-2147483647, 2147483647)
+-- Changed Cash_Card_No to VARCHAR as it doesnt fit Int min or max value (-2147483647, 2147483647)
+-- Changed School_Name and School_Location size to 256 and 512 respectively as data doesnt fit
+-- Changed educ_backgrounID and SchoolID as surrogate keys
+
+
+CREATE TABLE `Applicant` (
+    `ApplicantID` VARCHAR(20) NOT NULL COMMENT 'Unique identifier for each Applicant',
+    `Applicant_Name` VARCHAR(30) NOT NULL COMMENT 'Name of the Applicant',
+    `GWA` FLOAT(3,2) NOT NULL COMMENT 'Grade of the Applicant',
+        CHECK (`GWA` >= 1 AND `GWA` <= 5),
+    `Gender` CHAR(1) NOT NULL COMMENT 'Gender/Sex of the Applicant',
+        CHECK (`Gender` IN ('f','m')),
+    `Age` INT NOT NULL COMMENT 'Age of the Applicant',
+        CHECK (`Age` > 1 AND `Age` < 100),
+    `Date_of_Birth` DATE NOT NULL COMMENT 'Date of birth of the applicant',
+    `Civil_Stat` CHAR(1) NOT NULL COMMENT 'Civil status of the applicant 
+        S - Single
+        M - Married
+        W - Widowed',
+        CHECK (`Civil_Stat` IN ('S','M', 'W')),
+    `Religion` VARCHAR(30) NOT NULL COMMENT 'Religion of the applicant',
+    `Address` VARCHAR(80) NOT NULL COMMENT 'Address of the applicant',
+    `Place_Birth` VARCHAR(20) NOT NULL COMMENT 'Place of birth of the applicant',
+    `Mobile_No` VARCHAR(13) NOT NULL COMMENT 'Mobile number of the applicant',
+    `Email_Ad` VARCHAR(50) NOT NULL COMMENT 'Email address of the applicant',
+    `Current_Level` CHAR(2) NOT NULL COMMENT 'Current level/year of the Applicant
+        E - Elementary
+        JH - Junior High
+        SH - Senior High
+        T - Tertiary',
+        CHECK (`Current_Level` IN ('E','JH', 'SH', 'T')),
+    `Course` CHAR(15) NULL COMMENT 'Program enrolled in by the Applicant',
+    `Expected_Date_Grad` INT NULL COMMENT 'Date Of Expected Graduation of the Applicant',
+    `Mode_of_Receipt` CHAR(15) NOT NULL COMMENT 'Mode of Receipt payment of the Applicant
+        CC = Cash Card
+        P = Payroll',
+        CHECK (`Mode_of_Receipt` IN ('CC','P')),
+    `Cash_Card_No` VARCHAR(15) NULL COMMENT 'Cash card account number of the applicant (if applicable)',
+    `Combined_Monthly_Income` INT(6) NOT NULL COMMENT 'Combined monthly income of the applicant\'s household',
+    PRIMARY KEY (`ApplicantID`)
+) ENGINE = InnoDB;
+
+CREATE TABLE `School` (
+    `SchoolID` INT AUTO_INCREMENT PRIMARY KEY,
+    `School_Name` VARCHAR(256) NOT NULL COMMENT 'Name of the school the applicant attends.',
+    `School_Location` VARCHAR(512) NOT NULL COMMENT 'Location of the school the applicant attended',
+    `School_Type` VARCHAR(15) NOT NULL COMMENT 'Type of school of the applicant',
+        CHECK (`School_Type` IN ('Public','Private'))
+) ENGINE = InnoDB;
+
+CREATE TABLE `Family` (
+    `ApplicantID` VARCHAR(20) NOT NULL COMMENT 'Unique identifier for each Applicant',
+    `Guardian_Name` VARCHAR(30) NOT NULL COMMENT 'Name of applicant\'s Parent/Guardian',
+    `Relation_Type` VARCHAR(10) NOT NULL COMMENT 'Relationship of the applicant to the Parent/Guardian',
+    `Occupation` VARCHAR(40) NOT NULL COMMENT 'Occupation of the Parent/Guardian',
+    `Monthly_Income` INT(6) NOT NULL COMMENT 'Monthly income of the Parent/Guardian',
+    PRIMARY KEY (`ApplicantID`, `Relation_Type`),
+    FOREIGN KEY (`ApplicantID`) REFERENCES `Applicant` (`ApplicantID`)
+) ENGINE = InnoDB;
+
+CREATE TABLE `Educ_Background` (
+    `Educ_BackgroundID` INT AUTO_INCREMENT PRIMARY KEY,
+    `ApplicantID` VARCHAR(20) NOT NULL COMMENT 'Unique identifier for each Applicant',
+    `SchoolID` INT NOT NULL COMMENT 'Unique identifier for each School',
+    `Level` CHAR(2) NOT NULL COMMENT 'Level of the student attended during the time of their school
+        E - Elementary
+        JH - Junior High
+        SH - Senior High
+        T - Tertiary',
+        CHECK (`Level` IN ('E','JH', 'SH', 'T')),
+    `Inclusive_Years` VARCHAR(15) NOT NULL COMMENT 'Range of the year the student attended',
+    `Honors` VARCHAR(20) NULL COMMENT 'Honors received during their time',
+    FOREIGN KEY (`ApplicantID`) REFERENCES `Applicant` (`ApplicantID`),
+    FOREIGN KEY (`SchoolID`) REFERENCES `School` (`SchoolID`)
+) ENGINE = InnoDB;
+
+INSERT INTO `Applicant` (`ApplicantID`, `Applicant_Name`, `GWA`, `Gender`, `Age`, `Date_of_Birth`, `Religion`, `Address`, `Civil_Stat`, `Place_Birth`, `Mobile_No`, `Email_Ad`, `Current_Level`, `Course`, `Expected_Date_Grad`, `Mode_of_Receipt`, `Cash_Card_No`, `Combined_Monthly_Income`)
+VALUES
+('2021-142-21', 'Jose Dela Cruz', 1.25, 'M', 20, '2003-07-05', 'Roman Catholic', '1234 Mansanas St., Mangga, Pinya, Pasig City', 'S', 'Pasig City', '09152818242', 'jose_delacruz@gmail.com', 'T', 'BSCS', NULL, 'P', NULL, 20000),
+('2021-331-11', 'Maria Santos', 1.5, 'F', 22, '2002-03-25', 'Roman Catholic', '5121 Rizal St., Atis, Pinya, Quezon City', 'S', 'Quezon City', '09521214589', 'maria_santos@gmail.com', 'T', 'BSBio', NULL, 'P', NULL, 24000),
+('2021-540-13', 'Luna Mendez', 1.0, 'F', 22, '2002-03-12', 'Born Again', '1587 Rainbow St. Concepcion Dos, Marikina City', 'S', 'Marikina City', '09274060629', 'lunamendez@gmail.com', 'T', 'BSBA', NULL, 'CC', '789283265982', 16000),
+('2021-113-24', 'Isabella Cruz', 1.75, 'F', 22, '2001-10-09', 'Roman Catholic', '456 Rosal Street, Barangay Poblacion, Santa Rosa City, Laguna', 'S', 'Pampanga City', '09512142356', 'isabella_cruz@gmail.com', 'T', 'BSIT', NULL, 'P', NULL, 23500);
+
+INSERT INTO `School` (`School_Name`, `School_Location`, `School_Type`)
+VALUES
+('Santa Rosa Elementary School', '789 Pine Tree Road, Barangay Caingin, Santa Rosa City, Laguna', 'Public'),
+('Diwa ng Kabataan National High School', '321 Bonifacio Drive, Barangay Bagumbayan, Taguig City, Metro Manila', 'Public'),
+('Kalayaan Senior High School', '101 Mabini Boulevard, Barangay Tejeros, Makati City, Metro Manila', 'Private'),
+('Katipunan University', '654 Rizal Park, Barangay Ermita, Manila, Metro Manila', 'Private'),
+('Malaya Elementary School', '852 A. Luna Road, Barangay Balintawak, Quezon City, Metro Manila', 'Public'),
+('Pagasa National High School', '213 Tandang Sora Avenue, Barangay Culiat, Quezon City, Metro Manila', 'Public'),
+('Andres Bonifacio University', '967 Del Pilar Street, Barangay San Rafael, Mandaluyong City, Metro Manila', 'Public'),
+('Conception Integrated School', 'Shoe Avenue, Barangay Concepcion Uno, Marikina City, Metro Manila', 'Public'),
+('Marikina Science High School', 'Mayor Juan Chanyungco St., Barangay Parang, Marikina City, Metro Manila', 'Public'),
+('Pamantasan ng Lungsod ng Marikina', 'Brazil St., Greenheights Subd Concepcion Uno, Marikina City, Metro Manila', 'Public'),
+('Pagasa National High School', '213 Tandang Sora Avenue, Barangay Culiat, Quezon City, Metro Manila', 'Public'),
+('Santa Rosa Technology High School', '321 Maple Street, Barangay Market Area, Santa Rosa City, Laguna', 'Public');
+
+INSERT INTO `Family` (`ApplicantID`, `Guardian_Name`, `Relation_Type`, `Occupation`, `Monthly_Income`)
+VALUES
+('2021-142-21', 'Antonio Dela Cruz', 'Father', 'Delivery Rider', 20000),
+('2021-142-21', 'Lourdes Dela Cruz', 'Mother', 'Housewife', 0),
+('2021-331-11', 'Ricardo Santos', 'Father', 'Janitorial Staff', 13500),
+('2021-331-11', 'Teresa Santos', 'Mother', 'Retail Sales Clerk', 10500),
+('2021-540-13', 'Noel Mendez', 'Father', 'Taxi Driver', 16000),
+('2021-540-13', 'Angeline Mendez', 'Mother', 'Housewife', 0),
+('2021-113-24', 'Daniel Cruz', 'Father', 'Security Guard', 23500),
+('2021-113-24', 'Sofia Cruz', 'Mother', 'Housewife', 0);
+
+INSERT INTO `Educ_Background` (`ApplicantID`, `SchoolID`, `Level`, `Inclusive_Years`, `Honors`)
+VALUES
+('2021-142-21', 1, 'E', '2011-2017', 'High-Honors'),
+('2021-142-21', 2, 'JH', '2017-2021', 'High-Honors'),
+('2021-142-21', 3, 'SH', '2021-2024', 'High-Honors'),
+('2021-331-11', 1, 'E', '2011-2017', 'Honors'),
+('2021-331-11', 2, 'JH', '2017-2021', 'Honors'),
+('2021-331-11', 6, 'SH', '2021-2024', 'Honors'),
+('2021-540-13', 5, 'E', '2008-2014', NULL),
+('2021-540-13', 9, 'JH', '2014-2018', 'Honors'),
+('2021-540-13', 9, 'SH', '2018-2020', 'Honors'),
+('2021-540-13', 7, 'T', '2020-2024', 'Dean\'s Lister'),
+('2021-113-24', 8, 'E', '2013-2019', NULL),
+('2021-113-24', 8, 'JH', '2019-2023', NULL),
+('2021-113-24', 8, 'SH', '2023-2024', NULL);
+
+
+
+
+
+
