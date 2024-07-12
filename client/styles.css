@@ -287,6 +287,10 @@ th:nth-child(1){
     border: dotted black 1px;
 }
 
+#results-container tr:hover td{
+    background-color: #128bef28;;
+}
+
 #results-container > #table-container{
     border-top: dotted black 1px;
 }
