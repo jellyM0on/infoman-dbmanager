@@ -483,7 +483,7 @@ th:nth-child(1){
       margin-right: 10px;
   }
   
-  input[type="submit"] {
+  input[type="submit"]{
       background-color:#08742e;
       color: white;
       padding: 10px 20px;
@@ -491,7 +491,6 @@ th:nth-child(1){
       border-radius: 5px;
       cursor: pointer;
       display: block;
-      margin: 0 auto;
   }
   
   input[type="submit"]:hover {
@@ -611,20 +610,6 @@ th:nth-child(1){
     height: calc(100% - 4em);
     width: 100%;
     overflow: auto;
-/*     
-    justify-content: center; */
-    /* height: 80%;
-    overflow-y: auto;
-    background-color: white;
-    padding: 2em;
-    z-index: 9999;
-    width: 70%;
-    top: 50%;  
-    left: 50%; 
-    transform: translate(-50%, -50%); 
-    border: dashed black 1px;
-    border-radius: 5px; */
-
 }
 
 .update-modal-content {
@@ -648,7 +633,24 @@ th:nth-child(1){
 
 }
 
-
 #modal-cont{
     background:  #c7c6c6a1;
+}
+
+#form-btns{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2em;
+    width: 100%;
+}
+
+#reset-modal{
+    background-color:white;
+    color: black;
+    padding: 10px 20px;
+    border: solid black 1px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
 }
